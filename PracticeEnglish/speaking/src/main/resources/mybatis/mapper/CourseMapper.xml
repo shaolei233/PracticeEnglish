@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wx.speaking.mapper.CourseMapper">
+    <insert id="addUserCourse">
+        INSERT INTO user_course(user_id,course_id) VALUES (#{id},#{courseId})
+        WHERE NOT EXISTS
+        (SELECT * FROM user_course WHERE course_id=#{courseId})
+    </insert>
+
+    <select id="getCourseByUserId" resultType="com.wx.speaking.bean.Course">
+        SELECT * FROM course WHERE id=(SELECT course_id FROM user_course WHERE user_id=#{id})
+    </select>
+
+    <select id="getCourseByCourseId" resultType="com.wx.speaking.bean.Course">
+        SELECT * FROM course WHERE id=#{courseId}
+    </select>
+
+    <select id="getAllCourse" resultType="com.wx.speaking.bean.Course">
+        SELECT * FROM course
+    </select>
+
+
+
+</mapper>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wx.speaking.mapper.WordMapper">
+
+    <select id="getWordById" resultType="com.wx.speaking.bean.Word">
+        SELECT * FROM word WHERE id=#{word_id}
+    </select>
+
+    <select id="getWordList" resultType="com.wx.speaking.bean.Word">
+        SELECT * FROM word WHERE course_id=#{courseId} LIMIT 1000
+    </select>
+
+    <insert id="updateWord">
+        UPDATE word SET score=#{score}, count=count+1 WHERE id=#{word_id}
+    </insert>
+
+    <select id="getAllWord" resultType="com.wx.speaking.bean.Word">
+        SELECT * FROM word LIMIT 1000
+    </select>
+
+    <select id="getAvg" resultType="Double">
+        SELECT SUM(score*count)/SUM(count) FROM word WHERE count>0;
+    </select>
+
+</mapper>

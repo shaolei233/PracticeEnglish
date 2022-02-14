@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wx.speaking.mapper.SentenceInfoMapper">
+
+    <select id="getSentenceInfo" resultType="com.wx.speaking.bean.SentenceInfo">
+        SELECT * FROM sentence_info WHERE user_id=#{userId} and sentence_id=#{sentenceId}
+    </select>
+
+    <insert id="insertSentenceInfo">
+        INSERT INTO
+        sentence_info(user_id,sentence_id,total_score,accuracy_score,fluency_score,integrity_score,count)
+        VALUES
+        (#{userId},#{sentenceId},#{totalScore},#{accuracyScore},#{fluencyScore},#{integrityScore},0)
+    </insert>
+
+    <update id="updateSentenceInfo" >
+        UPDATE sentence_info
+        SET
+        accuracy_score = #{accuracyScore},
+        fluency_score = #{fluencyScore},
+        integrity_score = #{integrityScore},
+        total_score = #{totalScore},
+        count = count+1
+        WHERE user_id=#{userId} and sentence_id=#{sentenceId}
+    </update>
+
+    <delete id="deleteSentence_info">
+        DELETE from sentence_info where user_id=#{userId} and sentence_id=#{sentenceId}
+    </delete>
+
+    <select id="getSentenceList" resultType="java.lang.Integer">
+        select sentence_id from (select * from sentence_info where user_id=#{userId} and sentence_id &gt;= #{start} and sentence_id &lt;= #{end} order by total_score limit #{plan}) as A
+    </select>
+
+    <select id="getAvg" resultType="com.wx.speaking.bean.Stat">
+        SELECT SUM(total_score*count)/SUM(count) AS total_score, SUM(accuracy_score*count)/SUM(count) AS accuracy_score, SUM(fluency_score*count)/SUM(count) AS fluency_score, SUM(integrity_score*count)/SUM(count) AS integrity_score FROM sentence_info WHERE user_id=#{userId} AND count>0
+    </select>
+
+    <update id="setCollect">
+        UPDATE sentence_info SET is_collect=1 WHERE user_id = #{userId} AND sentence_id=#{id}
+    </update>
+
+    <update id="cancelCollect">
+        UPDATE sentence_info SET is_collect=0 WHERE user_id=#{userId} AND sentence_id=#{id}
+    </update>
+
+    <select id="getCollect" resultType="com.wx.speaking.bean.SentenceInfo">
+        SELECT * FROM sentence_info WHERE user_id=#{user_id} AND is_collect=1
+    </select>
+
+    <select id="getUserSentence" resultType="com.wx.speaking.bean.SentenceInfo">
+        SELECT * FROM sentence_info WHERE user_id=#{user_id}
+    </select>
+
+</mapper>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wx.speaking.mapper.UserMapper">
+
+    <select id="getUserById" resultType="com.wx.speaking.bean.User">
+        SELECT * FROM userinfo WHERE id=#{id}
+    </select>
+
+    <insert id="addUser">
+        INSERT INTO
+        userinfo(id,userName,userSex,curCourse)
+        values
+        (#{id},#{userName},#{userSex},#{curCourse})
+    </insert>
+
+    <update id="updateUser" >
+        UPDATE userinfo
+        SET
+          userName = #{userName},
+          userSex = #{userSex},
+          email = #{email},
+          education = #{education},
+          intro = #{intro}
+        WHERE id = #{id}
+    </update>
+
+    <select id="getCurCourse" resultType="Integer">
+        SELECT curCourse FROM userinfo WHERE id=#{id}
+    </select>
+
+    <update id="updateUserCourse">
+        UPDATE userinfo SET curCourse = #{course_id} WHERE id=#{user_id}
+    </update>
+
+</mapper>

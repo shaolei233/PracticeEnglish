@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wx.speaking.mapper.PostMapper">
+
+    <insert id="addPost">
+        INSERT INTO post(title, user_id, content, create_time, latest_time)
+        VALUES(#{title},#{user_id},#{content},#{time},#{lastTime})
+    </insert>
+
+    <select id="getPostList" resultType="com.wx.speaking.bean.Post">
+        SELECT * FROM post ORDER BY latest_time DESC
+    </select>
+
+    <update id="updatePostTime">
+        UPDATE post SET
+        latest_time = #{lastTime}
+    </update>
+
+</mapper>

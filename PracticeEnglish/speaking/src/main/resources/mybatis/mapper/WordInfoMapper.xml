@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wx.speaking.mapper.WordInfoMapper">
+
+    <select id="getWordInfo" resultType="com.wx.speaking.bean.WordInfo">
+        SELECT * FROM word_info WHERE user_id=#{userId} and word_id=#{wordId}
+    </select>
+
+    <insert id="insertWordInfo">
+        INSERT INTO
+        word_info(user_id,word_id,total_score)
+        VALUES
+        (#{userId},#{wordId},#{score})
+    </insert>
+
+    <update id="updateWordInfo">
+        UPDATE word_info SET
+        total_score = #{score},
+        count = count+1
+        WHERE user_id=#{userId} AND word_id=#{wordId}
+    </update>
+
+    <delete id="deleteWordInfo">
+        DELETE from word_info where user_id=#{userId} and word_id=#{wordId}
+    </delete>
+
+    <select id="getWordList" resultType="java.lang.Integer">
+        SELECT word_id FROM (SELECT * FROM word_info WHERE user_id=#{userId} AND word_id &gt;= #{start} AND word_id &lt;= #{end} ORDER BY total_score limit #{plan}) AS A
+    </select>
+
+    <select id="getAvg" resultType="Double">
+        SELECT SUM(total_score*count)/SUM(count) FROM word_info WHERE user_id=#{userId} AND count>0
+    </select>
+
+    <update id="setCollect">
+        UPDATE word_info SET is_collect=1 WHERE user_id=#{userId} AND word_id=#{id}
+    </update>
+
+    <update id="cancelCollect">
+        UPDATE word_info SET is_collect=0 WHERE user_id=#{userId} AND word_id=#{id}
+    </update>
+
+    <select id="getCollect" resultType="com.wx.speaking.bean.WordInfo">
+        SELECT * FROM word_info WHERE user_id=#{user_id} AND is_collect=1
+    </select>
+
+    <select id="getUserWord" resultType="com.wx.speaking.bean.WordInfo">
+        SELECT * FROM word_info WHERE user_id=#{user_id}
+    </select>
+</mapper>

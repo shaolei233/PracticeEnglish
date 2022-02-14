@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wx.speaking.mapper.UserCourseMapper">
+    <select id="getCourseByUserId" resultType="Integer">
+        SELECT course_id FROM user_course WHERE user_id=#{id}
+    </select>
+
+    <select id="getCurProcess" resultType="Integer">
+        SELECT cur_process FROM user_course WHERE user_id=#{user_id, jdbcType=VARCHAR} AND course_id=#{course_id}
+    </select>
+
+    <select id="getPlan" resultType="Integer">
+        SELECT plan FROM user_course WHERE user_id=#{user_id, jdbcType=VARCHAR} AND course_id=#{course_id}
+    </select>
+
+    <insert id="addUserCourse">
+        insert into user_course(user_id,course_id,cur_process)
+        values
+        (#{user_id, jdbcType=VARCHAR},#{course_id},#{curProcess})
+    </insert>
+
+    <update id="updateUserCourse">
+        insert into user_course(user_id,course_id,cur_process, plan)
+        values
+        (#{user_id, jdbcType=VARCHAR},#{course_id},#{curProcess},#{plan})
+        ON DUPLICATE KEY UPDATE
+        course_id = #{course_id}, cur_process=#{curProcess},plan=#{plan}
+    </update>
+
+    <update id="updateCurProcess">
+        UPDATE user_course SET cur_process=cur_process+plan
+    </update>
+
+</mapper>

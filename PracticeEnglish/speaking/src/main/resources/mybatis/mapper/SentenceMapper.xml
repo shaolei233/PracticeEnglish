@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wx.speaking.mapper.SentenceMapper">
+    <select id="getSentenceById" resultType="com.wx.speaking.bean.Sentence">
+        SELECT * FROM sentence WHERE id=#{id}
+    </select>
+
+    <update id="updateSentence">
+        UPDATE sentence SET
+        total_score=#{totalScore},accuracy_score=#{accuracyScore},fluency_score=#{fluencyScore},
+        integrity_score=#{integrityScore},word_score=#{wordScore},count=count+1
+        WHERE id=#{id}
+    </update>
+
+    <select id="getAllSentence" resultType="com.wx.speaking.bean.Sentence">
+        SELECT * FROM sentence
+    </select>
+
+    <select id="getSentenceList" resultType="com.wx.speaking.bean.Sentence">
+        SELECT * FROM sentence WHERE course_id=#{courseId}
+    </select>
+
+    <select id="getAvg" resultType="com.wx.speaking.bean.Stat">
+--         SELECT SUM(total_score*count)/SUM(count), SUM(accuracy_score*count)/SUM(count), SUM(fluency_score*count)/SUM(count), SUM(integrity_score*count)/SUM(count) FROM sentence WHERE count>0
+    SELECT SUM(total_score*count)/SUM(count) AS total_score, SUM(accuracy_score*count)/SUM(count) AS accuracy_score, SUM(fluency_score*count)/SUM(count) AS fluency_score, SUM(integrity_score*count)/SUM(count) AS integrity_score FROM sentence WHERE count>0
+    </select>
+</mapper>
